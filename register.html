@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Battery Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 500px;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      margin: 50px auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Battery Registration</h2>
+    <form id="batteryForm">
+      <label for="serial">Serial Number</label>
+      <input type="text" id="serial" name="serial" placeholder="Enter Serial Number" required>
+
+      <label for="staff">Staff</label>
+      <select id="staff" name="staff" required>
+        <option value="">Select Staff</option>
+        <option>Andrew</option>
+        <option>Kangjie</option>
+        <option>Benny</option>
+        <option>Jia Junbo</option>
+        <option>Zuchang</option>
+      </select>
+
+      <label for="status">Status</label>
+      <select id="status" name="status" required>
+        <option value="ADDED">IN</option>
+        <option value="REMOVED">OUT</option>
+      </select>
+
+      <label for="epc">EPC</label>
+      <input type="text" id="epc" name="epc" placeholder="EPC Code" required>
+
+      <label for="type">Battery Type</label>
+      <select id="type" name="type" required>
+        <option value="">Select Type</option>
+        <option>LFP</option>
+        <option>NMC</option>
+        <option>LIPO</option>
+        <option>Na-ion</option>
+        <option>Lead Acid</option>
+        <option>Others</option>
+      </select>
+
+      <label for="brand">Brand</label>
+      <input type="text" id="brand" name="brand" placeholder="Brand">
+
+      <label for="voltage">Voltage (V)</label>
+      <input type="number" step="0.01" id="voltage" name="voltage" placeholder="Voltage">
+
+      <label for="capacity">Capacity (Ah)</label>
+      <input type="number" step="0.01" id="capacity" name="capacity" placeholder="Capacity">
+
+      <button type="submit">Register Battery</button>
+    </form>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbx6Dy4hsh_VbvI8czotsaodNtbXkYs7MYxgYStOHLLejAJ06aJqkMm6D96_70D-TJ0z/exec";
+
+    document.getElementById("batteryForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const params = new URLSearchParams({
+        serial: document.getElementById("serial").value,
+        staff: document.getElementById("staff").value,
+        action: document.getElementById("status").value,
+        epc: document.getElementById("epc").value,
+        type: document.getElementById("type").value,
+        brand: document.getElementById("brand").value,
+        voltage: document.getElementById("voltage").value,
+        capacity: document.getElementById("capacity").value
+      });
+
+      fetch(`${scriptURL}?${params.toString()}`)
+        .then(res => res.text())
+        .then(data => {
+          document.getElementById("message").innerText = data;
+          document.getElementById("message").style.color = "green";
+          document.getElementById("batteryForm").reset();
+        })
+        .catch(err => {
+          document.getElementById("message").innerText = "Error: " + err;
+          document.getElementById("message").style.color = "red";
+        });
+    });
+  </script>
+</body>
+</html>
